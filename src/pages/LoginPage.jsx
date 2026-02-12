@@ -1,20 +1,32 @@
 import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../auth/AuthContext'
 
 function LoginPage() {
   const [username, setUsername] = useState('')
-  const [role, setRole] = useState('Viewer')
+  const [password, setPassword] = useState('')
+  const [error, setError] = useState('')
   const { login } = useAuth()
   const navigate = useNavigate()
 
   function handleSubmit(event) {
     event.preventDefault()
+    setError('')
     if (!username.trim()) {
+      setError('Please enter your username.')
       return
     }
-    login(username.trim(), role)
-    navigate('/', { replace: true })
+    if (!password) {
+      setError('Please enter your password.')
+      return
+    }
+
+    try {
+      login(username.trim(), password)
+      navigate('/', { replace: true })
+    } catch (err) {
+      setError(err.message || 'Login failed.')
+    }
   }
 
   return (
@@ -22,7 +34,7 @@ function LoginPage() {
       <div className="card form-card">
         <h2>Sign in to your workspace</h2>
         <p className="muted-text">
-          Choose a role to see how permissions change what you can do.
+          Sign in with your registered account to see role-based permissions.
         </p>
         <form onSubmit={handleSubmit} className="form">
           <div className="form-row">
@@ -39,19 +51,17 @@ function LoginPage() {
             />
           </div>
           <div className="form-row">
-            <label className="field-label" htmlFor="role">
-              Role
+            <label className="field-label" htmlFor="password">
+              Password
             </label>
-            <select
-              id="role"
+            <input
+              id="password"
               className="field-input"
-              value={role}
-              onChange={(e) => setRole(e.target.value)}
-            >
-              <option value="Viewer">Viewer</option>
-              <option value="Editor">Editor</option>
-              <option value="Admin">Admin</option>
-            </select>
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Your password"
+            />
           </div>
           <div className="form-actions">
             <button type="submit" className="btn btn-primary">
@@ -59,9 +69,10 @@ function LoginPage() {
             </button>
           </div>
         </form>
-        <p className="muted-text">
-          This is a local-only authentication demo. Your role is stored in
-          localStorage and restored on refresh and across tabs.
+        {error && <p className="error-text">{error}</p>}
+        <p className="muted-text small-text">
+          Don&apos;t have an account?{' '}
+          <Link to="/register">Create one now</Link>.
         </p>
       </div>
     </section>
