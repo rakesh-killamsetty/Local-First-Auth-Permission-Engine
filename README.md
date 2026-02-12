@@ -3,13 +3,13 @@
 A small **permission-based system manager** built with **React**, **React Router**, the **Context API**, and **localStorage**.  
 It renders a **Resource Dashboard** where what you can see, edit, archive, and delete depends on your current **role**: `Admin`, `Editor`, or `Viewer`.
 
-This project is intentionally focused on **data flow and logic** – there are **no CSS libraries**, only custom CSS written by hand.
+This project is intentionally focused on **data flow and logic** 
 
 ---
 
 ## Tech Stack
 
-- **Language**: JavaScript (no TypeScript)
+- **Language**: JavaScript 
 - **Bundler / Dev server**: Vite
 - **UI library**: React (function components + hooks)
 - **Routing**: React Router DOM
